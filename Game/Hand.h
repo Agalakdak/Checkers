@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <tuple>
 
 #include "../Models/Move.h"
@@ -7,11 +7,11 @@
 
 // methods for hands
 
-//ß òàê ïîíÿë, ýòî ìåòîä, êîòîðûé îòâå÷àåò çà 
+//Ð¯ Ñ‚Ð°Ðº Ð¿Ð¾Ð½ÑÐ», ÑÑ‚Ð¾ Ð¼ÐµÑ‚Ð¾Ð´, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð¾Ñ‚Ð²ÐµÑ‡Ð°ÐµÑ‚ Ð·Ð° 
 class Hand
 {
   public:
-      //êîñíòðóêòîð ïî óìîë÷àíèþ.
+      //ÐºÐ¾ÑÐ½Ñ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ.
     Hand(Board *board) : board(board)
     {
     }
@@ -23,28 +23,28 @@ class Hand
         int xc = -1, yc = -1;
         while (true)
         {
-            //ïðîâåðÿåì, åñòü ëè ñîáûòèå â î÷åðåäè
+            //Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, ÐµÑÑ‚ÑŒ Ð»Ð¸ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ðµ Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð¸
             if (SDL_PollEvent(&windowEvent))
             {
-                switch (windowEvent.type) //ñìîòðèì, êàêîã îòèïàñîáûòèå îáðàáàòûâàåòñÿ ñåé÷àñ
+                switch (windowEvent.type) //ÑÐ¼Ð¾Ñ‚Ñ€Ð¸Ð¼, ÐºÐ°ÐºÐ¾Ð³ Ð¾Ñ‚Ð¸Ð¿Ð°ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ðµ Ð¾Ð±Ñ€Ð°Ð±Ð°Ñ‚Ñ‹Ð²Ð°ÐµÑ‚ÑÑ ÑÐµÐ¹Ñ‡Ð°Ñ
                 {
-                case SDL_QUIT: // íàæàëè íà "âûõîä"
+                case SDL_QUIT: // Ð½Ð°Ð¶Ð°Ð»Ð¸ Ð½Ð° "Ð²Ñ‹Ñ…Ð¾Ð´"
                     resp = Response::QUIT;
                     break;
-                case SDL_MOUSEBUTTONDOWN: // íàæàëè ìûøêîé íà êëåòêó (ÿ òàê äóìàþ)
-                    x = windowEvent.motion.x;       //äóìàþ, òóò ïîëó÷àåì êîîðäèíàòû
-                    y = windowEvent.motion.y;       //äóìàþ, òóò ïîëó÷àåì êîîðäèíàòû
-                    xc = int(y / (board->H / 10) - 1); //äóìàþ, òóò âûñ÷èòûâàåì êîîðäèíàòû
-                    yc = int(x / (board->W / 10) - 1);//äóìàþ, òóò âûñ÷èòûâàåì êîîðäèíàòû
-                    if (xc == -1 && yc == -1 && board->history_mtx.size() > 1) //åñëè âûáðàíà êíîïêà "Íàçàä"
+                case SDL_MOUSEBUTTONDOWN: // Ð½Ð°Ð¶Ð°Ð»Ð¸ Ð¼Ñ‹ÑˆÐºÐ¾Ð¹ Ð½Ð° ÐºÐ»ÐµÑ‚ÐºÑƒ (Ñ Ñ‚Ð°Ðº Ð´ÑƒÐ¼Ð°ÑŽ)
+                    x = windowEvent.motion.x;       //Ð´ÑƒÐ¼Ð°ÑŽ, Ñ‚ÑƒÑ‚ Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹
+                    y = windowEvent.motion.y;       //Ð´ÑƒÐ¼Ð°ÑŽ, Ñ‚ÑƒÑ‚ Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹
+                    xc = int(y / (board->H / 10) - 1); //Ð´ÑƒÐ¼Ð°ÑŽ, Ñ‚ÑƒÑ‚ Ð²Ñ‹ÑÑ‡Ð¸Ñ‚Ñ‹Ð²Ð°ÐµÐ¼ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹
+                    yc = int(x / (board->W / 10) - 1);//Ð´ÑƒÐ¼Ð°ÑŽ, Ñ‚ÑƒÑ‚ Ð²Ñ‹ÑÑ‡Ð¸Ñ‚Ñ‹Ð²Ð°ÐµÐ¼ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹
+                    if (xc == -1 && yc == -1 && board->history_mtx.size() > 1) //ÐµÑÐ»Ð¸ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð° ÐºÐ½Ð¾Ð¿ÐºÐ° "ÐÐ°Ð·Ð°Ð´"
                     {
                         resp = Response::BACK;
                     }
-                    else if (xc == -1 && yc == 8) // åñëè âûáðàíà êíîïêà "ïåðåèãðàòü"
+                    else if (xc == -1 && yc == 8) // ÐµÑÐ»Ð¸ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð° ÐºÐ½Ð¾Ð¿ÐºÐ° "Ð¿ÐµÑ€ÐµÐ¸Ð³Ñ€Ð°Ñ‚ÑŒ"
                     {
                         resp = Response::REPLAY;
                     }
-                    else if (xc >= 0 && xc < 8 && yc >= 0 && yc < 8) //ïðîâåðÿåì êîîðäèíàòû êëåòêè
+                    else if (xc >= 0 && xc < 8 && yc >= 0 && yc < 8) //Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ ÐºÐ»ÐµÑ‚ÐºÐ¸
                     {
                         resp = Response::CELL;
                     }
@@ -54,10 +54,10 @@ class Hand
                         yc = -1;
                     }
                     break;
-                case SDL_WINDOWEVENT: // åñëè èçìåíèëîñü ïîëîæåíèå îêíà èëè ðàìåð îêíà
+                case SDL_WINDOWEVENT: // ÐµÑÐ»Ð¸ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð¾ÐºÐ½Ð° Ð¸Ð»Ð¸ Ñ€Ð°Ð¼ÐµÑ€ Ð¾ÐºÐ½Ð°
                     if (windowEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                     {
-                        board->reset_window_size(); // çàïèñûâàåì íîâûå ðàçìåðû îêíà
+                        board->reset_window_size(); // Ð·Ð°Ð¿Ð¸ÑÑ‹Ð²Ð°ÐµÐ¼ Ð½Ð¾Ð²Ñ‹Ðµ Ñ€Ð°Ð·Ð¼ÐµÑ€Ñ‹ Ð¾ÐºÐ½Ð°
                         break;
                     }
                 }
@@ -65,7 +65,7 @@ class Hand
                     break;
             }
         }
-        //âîçâðàùàåì îòâåò è êîîðäèíàòû êëåòêè
+        //Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ Ð¾Ñ‚Ð²ÐµÑ‚ Ð¸ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ ÐºÐ»ÐµÑ‚ÐºÐ¸
         return {resp, xc, yc};
     }
 
@@ -85,7 +85,7 @@ class Hand
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
                     board->reset_window_size();
                     break;
-                case SDL_MOUSEBUTTONDOWN: { // àíàëîãè÷íî êàê è ÷àòü êîäà âûøå
+                case SDL_MOUSEBUTTONDOWN: { // Ð°Ð½Ð°Ð»Ð¾Ð³Ð¸Ñ‡Ð½Ð¾ ÐºÐ°Ðº Ð¸ Ñ‡Ð°Ñ‚ÑŒ ÐºÐ¾Ð´Ð° Ð²Ñ‹ÑˆÐµ
                     int x = windowEvent.motion.x;
                     int y = windowEvent.motion.y;
                     int xc = int(y / (board->H / 10) - 1);

@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -15,7 +15,7 @@
 #endif
 
 using namespace std;
-//класс который отвечает за логику доски 
+//РєР»Р°СЃСЃ РєРѕС‚РѕСЂС‹Р№ РѕС‚РІРµС‡Р°РµС‚ Р·Р° Р»РѕРіРёРєСѓ РґРѕСЃРєРё 
 class Board
 {
 public:
@@ -25,14 +25,14 @@ public:
     }
 
     // draws start board
-    int start_draw() //главная функция по отрисовке 
+    int start_draw() //РіР»Р°РІРЅР°СЏ С„СѓРЅРєС†РёСЏ РїРѕ РѕС‚СЂРёСЃРѕРІРєРµ 
     {
-        if (SDL_Init(SDL_INIT_EVERYTHING) != 0) // Инициализация библиотеки SDL. Если не получилось — вывод ошибки и выход
+        if (SDL_Init(SDL_INIT_EVERYTHING) != 0) // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р±РёР±Р»РёРѕС‚РµРєРё SDL. Р•СЃР»Рё РЅРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ вЂ” РІС‹РІРѕРґ РѕС€РёР±РєРё Рё РІС‹С…РѕРґ
         {
             print_exception("SDL_Init can't init SDL2 lib");
             return 1;
         }
-        if (W == 0 || H == 0)  // Если ширина или высота не заданы — получаем разрешение экрана и вычисляем размер окна
+        if (W == 0 || H == 0)  // Р•СЃР»Рё С€РёСЂРёРЅР° РёР»Рё РІС‹СЃРѕС‚Р° РЅРµ Р·Р°РґР°РЅС‹ вЂ” РїРѕР»СѓС‡Р°РµРј СЂР°Р·СЂРµС€РµРЅРёРµ СЌРєСЂР°РЅР° Рё РІС‹С‡РёСЃР»СЏРµРј СЂР°Р·РјРµСЂ РѕРєРЅР°
         {
             SDL_DisplayMode dm;
             if (SDL_GetDesktopDisplayMode(0, &dm))
@@ -44,10 +44,10 @@ public:
             W -= W / 15;
             H = W;
         }
-        win = SDL_CreateWindow("Checkers", 0, H / 30, W, H, SDL_WINDOW_RESIZABLE); // Создание окна и рендера (рендер — инструмент для отрисовки графики)
+        win = SDL_CreateWindow("Checkers", 0, H / 30, W, H, SDL_WINDOW_RESIZABLE); // РЎРѕР·РґР°РЅРёРµ РѕРєРЅР° Рё СЂРµРЅРґРµСЂР° (СЂРµРЅРґРµСЂ вЂ” РёРЅСЃС‚СЂСѓРјРµРЅС‚ РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё РіСЂР°С„РёРєРё)
         if (win == nullptr)
         {
-            print_exception("SDL_CreateWindow can't create window");                // или выводим сообщение об ошибке
+            print_exception("SDL_CreateWindow can't create window");                // РёР»Рё РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
             return 1;
         }
         ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -56,7 +56,7 @@ public:
             print_exception("SDL_CreateRenderer can't create renderer");
             return 1;
         }
-        // Загрузка текстур. Доска, фишки, кнопки (назад, перезапуск)
+        // Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂ. Р”РѕСЃРєР°, С„РёС€РєРё, РєРЅРѕРїРєРё (РЅР°Р·Р°Рґ, РїРµСЂРµР·Р°РїСѓСЃРє)
         board = IMG_LoadTexture(ren, board_path.c_str());
         w_piece = IMG_LoadTexture(ren, piece_white_path.c_str());
         b_piece = IMG_LoadTexture(ren, piece_black_path.c_str());
@@ -84,8 +84,8 @@ public:
         clear_active();
         clear_highlight();
     }
-    // Перегруженная функция move_piece: принимает ход в виде структуры move_pos
-    // Если был захват фигуры — удаляем побитую фигуру
+    // РџРµСЂРµРіСЂСѓР¶РµРЅРЅР°СЏ С„СѓРЅРєС†РёСЏ move_piece: РїСЂРёРЅРёРјР°РµС‚ С…РѕРґ РІ РІРёРґРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ move_pos
+    // Р•СЃР»Рё Р±С‹Р» Р·Р°С…РІР°С‚ С„РёРіСѓСЂС‹ вЂ” СѓРґР°Р»СЏРµРј РїРѕР±РёС‚СѓСЋ С„РёРіСѓСЂСѓ
     void move_piece(move_pos turn, const int beat_series = 0)
     {
         if (turn.xb != -1)
@@ -95,9 +95,9 @@ public:
         move_piece(turn.x, turn.y, turn.x2, turn.y2, beat_series);
     }
 
-    // Перемещает фишку с (i,j) на (i2,j2)
-    // Если достигнут край доски — превращаем в дамку
-    // Обновляет историю ходов
+    // РџРµСЂРµРјРµС‰Р°РµС‚ С„РёС€РєСѓ СЃ (i,j) РЅР° (i2,j2)
+    // Р•СЃР»Рё РґРѕСЃС‚РёРіРЅСѓС‚ РєСЂР°Р№ РґРѕСЃРєРё вЂ” РїСЂРµРІСЂР°С‰Р°РµРј РІ РґР°РјРєСѓ
+    // РћР±РЅРѕРІР»СЏРµС‚ РёСЃС‚РѕСЂРёСЋ С…РѕРґРѕРІ
     void move_piece(const POS_T i, const POS_T j, const POS_T i2, const POS_T j2, const int beat_series = 0)
     {
         if (mtx[i2][j2])
@@ -242,9 +242,9 @@ private:
         add_history();
     }
 
-    // Главная функция отрисовки: очищает экран и перерисовывает все элементы
-    // Фигуры, подсветка, активная клетка, кнопки, результат игры
-    void rerender() // главная функция, перересовывает текстуры
+    // Р“Р»Р°РІРЅР°СЏ С„СѓРЅРєС†РёСЏ РѕС‚СЂРёСЃРѕРІРєРё: РѕС‡РёС‰Р°РµС‚ СЌРєСЂР°РЅ Рё РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµС‚ РІСЃРµ СЌР»РµРјРµРЅС‚С‹
+    // Р¤РёРіСѓСЂС‹, РїРѕРґСЃРІРµС‚РєР°, Р°РєС‚РёРІРЅР°СЏ РєР»РµС‚РєР°, РєРЅРѕРїРєРё, СЂРµР·СѓР»СЊС‚Р°С‚ РёРіСЂС‹
+    void rerender() // РіР»Р°РІРЅР°СЏ С„СѓРЅРєС†РёСЏ, РїРµСЂРµСЂРµСЃРѕРІС‹РІР°РµС‚ С‚РµРєСЃС‚СѓСЂС‹
     {
         // draw board
         SDL_RenderClear(ren);
@@ -307,7 +307,7 @@ private:
         SDL_Rect replay_rect{ W * 109 / 120, H / 40, W / 15, H / 15 };
         SDL_RenderCopy(ren, replay, NULL, &replay_rect);
 
-        // draw result. Рисуем - кто выиграл в конце игры.
+        // draw result. Р РёСЃСѓРµРј - РєС‚Рѕ РІС‹РёРіСЂР°Р» РІ РєРѕРЅС†Рµ РёРіСЂС‹.
         if (game_results != -1)
         {
             string result_path = draw_path;
@@ -332,7 +332,7 @@ private:
         SDL_Event windowEvent;
         SDL_PollEvent(&windowEvent);
     }
-    // Записывает ошибки в лог-файл, чтобы можно было проверить, что пошло не так
+    // Р—Р°РїРёСЃС‹РІР°РµС‚ РѕС€РёР±РєРё РІ Р»РѕРі-С„Р°Р№Р», С‡С‚РѕР±С‹ РјРѕР¶РЅРѕ Р±С‹Р»Рѕ РїСЂРѕРІРµСЂРёС‚СЊ, С‡С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє
     void print_exception(const string& text) {
         ofstream fout(project_path + "log.txt", ios_base::app);
         fout << "Error: " << text << ". "<< SDL_GetError() << endl;
