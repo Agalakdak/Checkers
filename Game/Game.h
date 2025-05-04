@@ -20,7 +20,10 @@ class Game
     // to start checkers
     int play()
     {
+        //начинаем отсчЄт времени
         auto start = chrono::steady_clock::now();
+        
+
         if (is_replay)
         {
             logic = Logic(&board, &config);
@@ -36,26 +39,37 @@ class Game
         int turn_num = -1;
         bool is_quit = false;
         const int Max_turns = config("Game", "MaxNumTurns");
+
+
+        //делаем ходы поочередно 
         while (++turn_num < Max_turns)
         {
             beat_series = 0;
             logic.find_turns(turn_num % 2);
             if (logic.turns.empty())
                 break;
+            //конструкци€ ниже не сразу, но была пон€та мной.
+            //ƒостаточно хорошее применеие кратного if. ѕо сути, мы здесь просто получаем значение из пол€ config. 
             logic.Max_depth = config("Bot", string((turn_num % 2) ? "Black" : "White") + string("BotLevel"));
+            // определ€ем то, кто сейчас ходит 
             if (!config("Bot", string("Is") + string((turn_num % 2) ? "Black" : "White") + string("Bot")))
             {
+                //если ходит человек, мы вызываемфункцию ниже 
                 auto resp = player_turn(turn_num % 2);
+
+                //если нажали на "выйти"
                 if (resp == Response::QUIT)
                 {
                     is_quit = true;
                     break;
                 }
+                // если решили начать игру с начала
                 else if (resp == Response::REPLAY)
                 {
                     is_replay = true;
                     break;
                 }
+                //если решили вернуть ход назад
                 else if (resp == Response::BACK)
                 {
                     if (config("Bot", string("Is") + string((1 - turn_num % 2) ? "Black" : "White") + string("Bot")) &&
@@ -73,11 +87,17 @@ class Game
                 }
             }
             else
-                bot_turn(turn_num % 2);
+                bot_turn(turn_num % 2); // если ходит бот, то выполн€етс€ эта часть кода
         }
+        
+        // заканчиваем подсчЄт времени
         auto end = chrono::steady_clock::now();
+
+        //€ так понимаю, что тут записываем лог
         ofstream fout(project_path + "log.txt", ios_base::app);
+        // «аписываем врем€ хода
         fout << "Game time: " << (int)chrono::duration<double, milli>(end - start).count() << " millisec\n";
+        //закрываем файл дл€ записи
         fout.close();
 
         if (is_replay)
@@ -85,6 +105,7 @@ class Game
         if (is_quit)
             return 0;
         int res = 2;
+        //смотрим, превысили мы кол-во ходов или нет, если превысили, то игра заканчиваетс€
         if (turn_num == Max_turns)
         {
             res = 0;
@@ -93,6 +114,7 @@ class Game
         {
             res = 1;
         }
+
         board.show_final(res);
         auto resp = hand.wait();
         if (resp == Response::REPLAY)
@@ -106,15 +128,15 @@ class Game
   private:
     void bot_turn(const bool color)
     {
-        auto start = chrono::steady_clock::now();
+        auto start = chrono::steady_clock::now(); // начинаем считать врем€
 
-        auto delay_ms = config("Bot", "BotDelayMS");
+        auto delay_ms = config("Bot", "BotDelayMS");  //записываем значение из json файла
         // new thread for equal delay for each turn
-        thread th(SDL_Delay, delay_ms);
-        auto turns = logic.find_best_turns(color);
-        th.join();
+        thread th(SDL_Delay, delay_ms); // открываем дополнительный поток, что бы подсчЄт был одинаков (хз, вз€л из лекции)
+        auto turns = logic.find_best_turns(color); //ищем "лучший" ход
+        th.join(); // соедин€емс€ с потоком
         bool is_first = true;
-        // making moves
+        // making moves делаем ход 
         for (auto turn : turns)
         {
             if (!is_first)
@@ -140,18 +162,23 @@ class Game
         {
             cells.emplace_back(turn.x, turn.y);
         }
+        //подсвечиваем клетки доступные дл€ хода
         board.highlight_cells(cells);
         move_pos pos = {-1, -1, -1, -1};
         POS_T x = -1, y = -1;
-        // trying to make first move
+        // ќбрабатываем клики в цикле ниже до тех пор, пока не будет сделан ход 
         while (true)
         {
+            //получаем клетку при помощи клика 
             auto resp = hand.get_cell();
+            //ѕроверка, что мы выбрали клетку
             if (get<0>(resp) != Response::CELL)
                 return get<0>(resp);
             pair<POS_T, POS_T> cell{get<1>(resp), get<2>(resp)};
 
             bool is_correct = false;
+
+            //провер€ем, что мы можем походить так, как указал игрок
             for (auto turn : logic.turns)
             {
                 if (turn.x == cell.first && turn.y == cell.second)
@@ -193,6 +220,7 @@ class Game
             }
             board.highlight_cells(cells2);
         }
+
         board.clear_highlight();
         board.clear_active();
         board.move_piece(pos, pos.xb != -1);
@@ -220,7 +248,8 @@ class Game
                 if (get<0>(resp) != Response::CELL)
                     return get<0>(resp);
                 pair<POS_T, POS_T> cell{get<1>(resp), get<2>(resp)};
-
+                
+                //проверка корректности хода 
                 bool is_correct = false;
                 for (auto turn : logic.turns)
                 {
